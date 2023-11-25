@@ -1,10 +1,10 @@
 import axios from "axios"
 
-const API_URL = 'http://localhost:5000'
+const API_URL = 'http://localhost:8080'
 
 type NovaEnquete = {
     pergunta: string
-    tempo_segundos: string
+    tempo: number
 }
 
 type AdicionarResposta = {
@@ -18,12 +18,16 @@ async function criarNovaEnquete(data: NovaEnquete) {
     return response
 }
 
-async function encerrarEnquete(id: string) {
-    return await axios.put(`${API_URL}/enquete/${id}`)
+async function encerrarEnquete() {
+    return await axios.put(`${API_URL}/enquete/encerrar`)
 }
 
-async function buscarEnqueteAativa() {
+async function buscarEnqueteAtiva() {
     return await axios.get(`${API_URL}/enquete/ativa`)
+}
+
+async function buscarEnquetesEncerradas() {
+    return await axios.get(`${API_URL}/enquete/encerradas`)
 }
 
 async function adicionarResposta(data: AdicionarResposta) {
@@ -34,6 +38,7 @@ async function adicionarResposta(data: AdicionarResposta) {
 export const api = {
     criarNovaEnquete,
     encerrarEnquete,
-    buscarEnqueteAativa,
-    adicionarResposta
+    buscarEnqueteAtiva,
+    adicionarResposta,
+    buscarEnquetesEncerradas
 }

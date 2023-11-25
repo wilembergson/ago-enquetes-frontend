@@ -1,16 +1,18 @@
 'use client'
 import { api } from '@/api/api-conections'
 import { useState } from 'react'
+import { useGlobalContext } from '../context/ContextoEnqueteAtiva'
 
 type NovaEnquete = {
     pergunta: string
-    tempo_segundos: string
+    tempo: string
 }
 
 export default function CriarEnqueteForm() {
+    const { setEnqueteAtiva } = useGlobalContext()
     const [enquete, setEnquete] = useState<NovaEnquete>({
         pergunta: '',
-        tempo_segundos: ''
+        tempo: ''
     })
 
     function handleChange({ target }: any) {
@@ -19,13 +21,19 @@ export default function CriarEnqueteForm() {
 
     async function adicionarEnquete() {
         try {
-            await api.criarNovaEnquete(enquete)
+            const novaEnquete = await api.criarNovaEnquete({
+                pergunta: enquete.pergunta,
+                tempo: parseInt(enquete.tempo)
+            })
             setEnquete({
                 pergunta: '',
-                tempo_segundos: ''
+                tempo: ''
             })
+            alert(novaEnquete.data.mensagem)
+            const response = await api.buscarEnqueteAtiva()
+            setEnqueteAtiva(response.data)
         } catch (error: any) {
-            alert(error)
+            alert(error.response.data.mensagem)
             console.log(error)
         }
     }
@@ -43,10 +51,10 @@ export default function CriarEnqueteForm() {
             />
             <input className='flex m-2'
                 type="number"
-                placeholder='Duração (em segundos)'
-                name='tempo_segundos'
+                placeholder='Duração (em minutos)'
+                name='tempo'
                 onChange={(e: any) => handleChange(e)}
-                value={enquete.tempo_segundos}
+                value={enquete.tempo}
                 required
             />
             <button>Criar</button>
