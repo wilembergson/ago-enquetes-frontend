@@ -39,17 +39,21 @@ export default function CriarEnqueteForm() {
     }
 
     return (
-        <form className='flex flex-col mt-4'
+        <div className='flex font-principal flex-col mt-10 rounded-xl shadow-lg'>
+            <h1 className='flex font-black text-white text-lg bg-green-500 p-2'>
+                Nova enquete
+            </h1>
+            <form className='flex flex-col mt-4 bg-white'
             action={adicionarEnquete}>
-            <input className='flex m-2'
-                type="text"
+            <textarea className='flex m-2 bg-gray-100 p-2 rounded-md'
+                
                 placeholder='Digite uma nova pergunta'
                 name='pergunta'
                 onChange={(e: any) => handleChange(e)}
                 value={enquete.pergunta}
                 required
             />
-            <input className='flex m-2'
+            <input className='flex m-2 bg-gray-100 p-2 rounded-md'
                 type="number"
                 placeholder='Duração (em minutos)'
                 name='tempo'
@@ -57,7 +61,10 @@ export default function CriarEnqueteForm() {
                 value={enquete.tempo}
                 required
             />
-            <button>Criar</button>
+            <button className='flex bg-green-500 text-white justify-center m-4 p-2 rounded-lg hover:opacity-70 transition duration-500'>
+                Criar
+            </button>
         </form>
+        </div>
     )
 }
