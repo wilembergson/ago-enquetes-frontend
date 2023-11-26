@@ -1,6 +1,8 @@
 import { api } from '@/api/api-conections'
 import { useEffect } from 'react'
 import { useGlobalContext } from '../context/ContextoEnqueteAtiva'
+import ItemPrincipal from './ItemPrincipal'
+import { botaoStyle } from '../utils/botao-style'
 
 
 export default function EnqueteAtiva() {
@@ -32,19 +34,26 @@ export default function EnqueteAtiva() {
     }, [enqueteAtiva])
 
     return (
-        <div className='flex flex-col bg-lime-300 mt-10'>
-            <h2>Enquete em votação</h2>
+        <ItemPrincipal titulo='Enquete em votação' cor='bg-blue-500'>
             {enqueteAtiva ?
-                <section className='flex flex-col items-center'>
-                    <h3 className='flex font-black m-2'>{enqueteAtiva.pergunta}</h3>
-                    <button className='flex bg-blue-200 w-auto justify-center'
-                        onClick={() => encerrarEnquete()}>
-                        Encerrar
-                    </button>
+                <section className='flex flex-col items-center p-4'>
+                    <h3 className='flex font-black text-gray-700'>
+                        {enqueteAtiva.pergunta}
+                    </h3>
+                    <div className='flex w-full mt-4'>
+                    <button className={botaoStyle('bg-blue-500')}
+                            onClick={() => encerrarEnquete()}>
+                            Editar
+                        </button>
+                        <button className={botaoStyle('bg-yellow-400')}
+                            onClick={() => encerrarEnquete()}>
+                            Encerrar
+                        </button>
+                    </div>
                 </section>
-                : <h1 className='flex bg-blue-200 justify-center'>
+                : <h1 className='flex justify-center text-gray-500 p-10 text-md'>
                     Sem enquetes ativas no momento
                 </h1>}
-        </div>
+        </ItemPrincipal>
     )
 }

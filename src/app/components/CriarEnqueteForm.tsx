@@ -2,6 +2,8 @@
 import { api } from '@/api/api-conections'
 import { useState } from 'react'
 import { useGlobalContext } from '../context/ContextoEnqueteAtiva'
+import ItemPrincipal from './ItemPrincipal'
+import { botaoStyle } from '../utils/botao-style'
 
 type NovaEnquete = {
     pergunta: string
@@ -39,32 +41,31 @@ export default function CriarEnqueteForm() {
     }
 
     return (
-        <div className='flex font-principal flex-col mt-10 rounded-xl shadow-lg'>
-            <h1 className='flex font-black text-white text-lg bg-green-500 p-2'>
-                Nova enquete
-            </h1>
-            <form className='flex flex-col mt-4 bg-white'
-            action={adicionarEnquete}>
-            <textarea className='flex m-2 bg-gray-100 p-2 rounded-md'
-                
-                placeholder='Digite uma nova pergunta'
-                name='pergunta'
-                onChange={(e: any) => handleChange(e)}
-                value={enquete.pergunta}
-                required
-            />
-            <input className='flex m-2 bg-gray-100 p-2 rounded-md'
-                type="number"
-                placeholder='Duração (em minutos)'
-                name='tempo'
-                onChange={(e: any) => handleChange(e)}
-                value={enquete.tempo}
-                required
-            />
-            <button className='flex bg-green-500 text-white justify-center m-4 p-2 rounded-lg hover:opacity-70 transition duration-500'>
-                Criar
-            </button>
-        </form>
-        </div>
+        <ItemPrincipal titulo='Nova enquete' cor='bg-green-500'>
+            <form className='flex flex-col p-4 bg-white'
+                action={adicionarEnquete}>
+                <textarea className='flex mb-4 bg-gray-100 p-2 rounded-md'
+
+                    placeholder='Digite uma nova pergunta'
+                    name='pergunta'
+                    onChange={(e: any) => handleChange(e)}
+                    value={enquete.pergunta}
+                    required
+                />
+                <input className='flex mb-4 bg-gray-100 p-2 rounded-md'
+                    type="number"
+                    placeholder='Duração (em minutos)'
+                    name='tempo'
+                    onChange={(e: any) => handleChange(e)}
+                    value={enquete.tempo}
+                    required
+                />
+                <div>
+                    <button className={botaoStyle('bg-green-500')}>
+                        Criar
+                    </button>
+                </div>
+            </form>
+        </ItemPrincipal>
     )
 }

@@ -1,5 +1,7 @@
 import {useState, useEffect} from 'react'
 import { api } from "@/api/api-conections"
+import ItemPrincipal from './ItemPrincipal'
+import ItemEnqueteEncerrada from './ItemEnqueteEncerrada'
 
 export default function EnquetesEncerradas(){
     const [enquetes, setEnquetes] = useState<Enquete[]>()
@@ -22,13 +24,14 @@ export default function EnquetesEncerradas(){
     },[enquetes])
 
     return(
-        <div className='flex flex-col mt-10'>
-            <h2>Enquetes encerradas</h2>
+        <ItemPrincipal titulo={`Enquetes encerradas (${enquetes?.length})`} cor='bg-red-500'>
             {enquetes?.map(item => 
-            <section className='flex bg-red-200 my-2 cursor-pointer'>
-                {item.pergunta}
-            </section>)}
-        </div>
+            <ItemEnqueteEncerrada 
+                id={item.id}
+                pergunta={item.pergunta}
+                data_hora={item.data_hora}
+            />)}
+        </ItemPrincipal>
     )
 }
 

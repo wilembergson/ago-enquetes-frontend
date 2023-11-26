@@ -6,15 +6,17 @@ import EnquetesEncerradas from './components/EnquetesEncerradas'
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center p-14">
-      <h1 className='flex font-principal text-3xl'>
+      <h1 className='flex font-principal font-black text-3xl text-gray-700'>
         AGO 2024 - Adm
       </h1>
-      <div className='flex flex-col'>
-        <section>
+      <div className='flex w-full justify-end '>
+        <section className='flex flex-col w-1/2 px-14'>
           <CriarEnqueteForm />
           <EnqueteAtiva />
         </section>
-        {/*<EnquetesEncerradas/>*/}
+        <section>
+          <EnquetesEncerradas />
+        </section>
       </div>
     </main>
   )
