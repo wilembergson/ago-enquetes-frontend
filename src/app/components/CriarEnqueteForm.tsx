@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useGlobalContext } from '../context/ContextoEnqueteAtiva'
 import ItemPrincipal from './ItemPrincipal'
 import { botaoStyle } from '../utils/botao-style'
+import alerts from '../utils/alerts'
 
 type NovaEnquete = {
     pergunta: string
@@ -21,6 +22,13 @@ export default function CriarEnqueteForm() {
         setEnquete({ ...enquete, [target.name]: target.value })
     }
 
+    function confirmarNovaEnquete() {
+        alerts.ConfirmarAlert(
+            adicionarEnquete,
+            'Confirmar nova enquete?',
+            'Ao confirmar, esta enquete será exibida para votação.'
+        )
+    }
     async function adicionarEnquete() {
         try {
             const novaEnquete = await api.criarNovaEnquete({
@@ -31,21 +39,19 @@ export default function CriarEnqueteForm() {
                 pergunta: '',
                 tempo: ''
             })
-            alert(novaEnquete.data.mensagem)
+            alerts.SucessoAlert(novaEnquete.data.mensagem)
             const response = await api.buscarEnqueteAtiva()
             setEnqueteAtiva(response.data)
         } catch (error: any) {
-            alert(error.response.data.mensagem)
-            console.log(error)
+            alerts.ErrorAlert(error.response.data.mensagem)
         }
     }
 
     return (
         <ItemPrincipal titulo='Nova enquete' cor='bg-green-500'>
             <form className='flex flex-col p-4 bg-white'
-                action={adicionarEnquete}>
+                action={confirmarNovaEnquete}>
                 <textarea className='flex mb-4 bg-gray-100 p-2 rounded-md'
-
                     placeholder='Digite uma nova pergunta'
                     name='pergunta'
                     onChange={(e: any) => handleChange(e)}

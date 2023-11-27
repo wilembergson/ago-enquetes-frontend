@@ -1,15 +1,16 @@
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import { api } from "@/api/api-conections"
 import ItemPrincipal from './ItemPrincipal'
 import ItemEnqueteEncerrada from './ItemEnqueteEncerrada'
+import { useGlobalContext } from '../context/ContextoEnqueteAtiva'
 
-export default function EnquetesEncerradas(){
+export default function EnquetesEncerradas() {
     const [enquetes, setEnquetes] = useState<Enquete[]>()
+    const { enqueteAtiva, setEnqueteAtiva } = useGlobalContext()
 
-    async function listarEnquetes(){
+    async function listarEnquetes() {
         try {
             const lista = await api.buscarEnquetesEncerradas()
-            console.log(lista)
             setEnquetes(lista.data)
         } catch (error: any) {
             alert(error.response.data.mensagem)
@@ -18,19 +19,18 @@ export default function EnquetesEncerradas(){
     }
 
     useEffect(() => {
-        
-            listarEnquetes()
-        
-    },[enquetes])
+        listarEnquetes()
+    }, [enqueteAtiva])
 
-    return(
+    return (
         <ItemPrincipal titulo={`Enquetes encerradas (${enquetes?.length})`} cor='bg-red-500'>
-            {enquetes?.map(item => 
-            <ItemEnqueteEncerrada 
-                id={item.id}
-                pergunta={item.pergunta}
-                data_hora={item.data_hora}
-            />)}
+            {enquetes?.map(item =>
+                <ItemEnqueteEncerrada
+                    key={item.id}
+                    id={item.id}
+                    pergunta={item.pergunta}
+                    data_hora={item.data_hora}
+                />)}
         </ItemPrincipal>
     )
 }

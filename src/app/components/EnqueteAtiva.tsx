@@ -1,31 +1,45 @@
+'useClient'
 import { api } from '@/api/api-conections'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useGlobalContext } from '../context/ContextoEnqueteAtiva'
 import ItemPrincipal from './ItemPrincipal'
 import { botaoStyle } from '../utils/botao-style'
+import alerts from '../utils/alerts'
 
 
 export default function EnqueteAtiva() {
 
+    const [enquete, setEnquete] = useState<any>(null)
     const { enqueteAtiva, setEnqueteAtiva } = useGlobalContext()
 
     async function obterEnqueteAtiva() {
         try {
             const response = await api.buscarEnqueteAtiva()
-            setEnqueteAtiva(response.data)
+            setEnquete(response.data)
         } catch (error: any) {
             alert(error)
-            console.log(error)
+            alerts.ErrorAlert(error.response.data.mensagem)
         }
     }
 
+    function confirmarEncerramentoEnquete() {
+        alerts.ConfirmarAlert(
+            encerrarEnquete,
+            'Encerrar enquete?',
+            'Ao confirmar, não será mais possível votar.'
+        )
+    }
+    async function teste() {
+        alert("testando")
+    }
     async function encerrarEnquete() {
         try {
             const response = await api.encerrarEnquete()
-            alert(response.data.mensagem)
+            setEnquete(null)
+            setEnqueteAtiva(null)
+            alerts.SucessoAlert(response.data.mensagem)
         } catch (error: any) {
-            alert(error)
-            console.log(error)
+            alerts.ErrorAlert(error.response.data.mensagem)
         }
     }
 
@@ -35,18 +49,17 @@ export default function EnqueteAtiva() {
 
     return (
         <ItemPrincipal titulo='Enquete em votação' cor='bg-blue-500'>
-            {enqueteAtiva ?
+            {enquete ?
                 <section className='flex flex-col items-center p-4'>
                     <h3 className='flex font-black text-gray-700'>
-                        {enqueteAtiva.pergunta}
+                        {enquete.pergunta}
                     </h3>
                     <div className='flex w-full mt-4'>
-                    <button className={botaoStyle('bg-blue-500')}
-                            onClick={() => encerrarEnquete()}>
+                        <button className={botaoStyle('bg-blue-500')}>
                             Editar
                         </button>
                         <button className={botaoStyle('bg-yellow-400')}
-                            onClick={() => encerrarEnquete()}>
+                            onClick={confirmarEncerramentoEnquete}>
                             Encerrar
                         </button>
                     </div>
