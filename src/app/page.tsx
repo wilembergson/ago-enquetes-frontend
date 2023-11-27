@@ -1,9 +1,17 @@
 'use client'
+
+import Aos from 'aos'
+import { useEffect } from 'react'
 import CriarEnqueteForm from './components/CriarEnqueteForm'
 import EnqueteAtiva from './components/EnqueteAtiva'
 import EnquetesEncerradas from './components/EnquetesEncerradas'
 
 export default function Home() {
+
+  useEffect(() => {
+    Aos.init({ duration: 500 })
+  }, [])
+
   return (
     <main className="flex min-h-screen flex-col items-center p-14">
       <h1 className='flex font-principal font-black text-3xl text-gray-700'>

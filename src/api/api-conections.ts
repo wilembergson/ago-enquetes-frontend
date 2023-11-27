@@ -30,6 +30,12 @@ async function buscarEnquetesEncerradas() {
     return await axios.get(`${API_URL}/enquete/encerradas`)
 }
 
+
+async function atualizarEnquete(data: NovaEnquete) {
+    const response = await axios.put(`${API_URL}/enquete/atualizar`, data)
+    return response
+}
+
 async function adicionarResposta(data: AdicionarResposta) {
     const response = await axios.post(`${API_URL}/resposta`, data)
     return response
@@ -40,5 +46,6 @@ export const api = {
     encerrarEnquete,
     buscarEnqueteAtiva,
     adicionarResposta,
+    atualizarEnquete,
     buscarEnquetesEncerradas
 }
