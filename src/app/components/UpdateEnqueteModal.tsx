@@ -12,7 +12,7 @@ type Props = {
 
 type UpdateEnquete = {
     pergunta: string;
-    tempo: string;
+    tempo: number;
 }
 
 export default function UpdateEnqueteModal({ isVisible, setVisible }: Props) {
@@ -20,19 +20,19 @@ export default function UpdateEnqueteModal({ isVisible, setVisible }: Props) {
 
     const [enquete, setEnquete] = useState<UpdateEnquete>({
         pergunta: enqueteAtiva?.pergunta!,
-        tempo: enqueteAtiva?.tempo.toString()!
-    })
+        tempo: enqueteAtiva?.tempo!
+    } )
 
     function handleChange({ target }: any) {
         setEnquete({ ...enquete, [target.name]: target.value })
     }
 
-    /*async function obterEnqueteAtiva() {
+    async function obterEnqueteAtiva() {
         try {
             const response = await api.buscarEnqueteAtiva()
             setEnquete({
                 pergunta: response.data.pergunta,
-                tempo: response.data.tempo.toString()
+                tempo: response ? response.data.tempo : ''
             })
         } catch (error: any) {
             alert(error)
@@ -40,7 +40,8 @@ export default function UpdateEnqueteModal({ isVisible, setVisible }: Props) {
         }
     }
 
-    function confirmarAtualizacao(){
+    function confirmarAtualizacao(event:any){
+        event.preventDefault()
         alerts.ConfirmarAlert(
             atualizarEnquete,
             'Cofirmar atualização?',
@@ -52,12 +53,12 @@ export default function UpdateEnqueteModal({ isVisible, setVisible }: Props) {
         try {
             const response = await api.atualizarEnquete({
                 pergunta: enquete.pergunta!,
-                tempo: parseInt(enquete.tempo!)
+                tempo: enquete?.tempo!
             })
             setEnqueteAtiva({
                 id: enqueteAtiva?.id!,
                 pergunta: enquete.pergunta!,
-                tempo: parseInt(enquete.tempo!),
+                tempo: enquete.tempo,
                 ativo: enqueteAtiva?.ativo!,
                 data_hora: enqueteAtiva?.data_hora!
             })
@@ -71,7 +72,7 @@ export default function UpdateEnqueteModal({ isVisible, setVisible }: Props) {
 
     useEffect(() => {
         obterEnqueteAtiva()
-    }, [enqueteAtiva])*/
+    }, [enqueteAtiva])
 
     return (
         <Modal isVisible={isVisible}>
@@ -80,7 +81,7 @@ export default function UpdateEnqueteModal({ isVisible, setVisible }: Props) {
                     Editar enquete
                 </h1>
                 <form className='flex flex-col p-4 bg-white'
-                >
+                    onSubmit={confirmarAtualizacao}>
                     <textarea className='flex mb-4 bg-gray-100 p-2 rounded-md'
                         placeholder='Digite uma nova pergunta'
                         name='pergunta'

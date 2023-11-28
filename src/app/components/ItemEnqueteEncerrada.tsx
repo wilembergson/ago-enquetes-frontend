@@ -12,7 +12,7 @@ export default function ItemEnqueteEncerrada({id, pergunta, data_hora}:Props){
                 {pergunta}
             </h2>
             <h3 className="flex text-sm text-gray-600">
-                Iniciada em: {`${data_hora[2]}/${data_hora[1]}/${data_hora[0]} às ${data_hora[3]}:${data_hora[4]}h`}
+                Iniciada em: {`${data_hora[2]}/${data_hora[1]}/${data_hora[0]} às ${data_hora[3]<10 ? '0' : ''}${data_hora[3]}:${data_hora[4]<10 ? '0' : ''}${data_hora[4]}h`}
             </h3>
         </section>
     )
