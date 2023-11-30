@@ -9,7 +9,6 @@ export default function EnquetesEncerradas() {
     const { enqueteAtiva, setEnqueteAtiva } = useGlobalContext()
 
     async function listarEnquetes() {
-        //alert("ENQUETES ENCERRADAS.")
         try {
             const lista = await api.buscarEnquetesEncerradas()
             console.log(lista.data)
