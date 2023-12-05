@@ -37,12 +37,12 @@ async function atualizarEnquete(data: NovaEnquete) {
 }
 
 async function adicionarResposta(data: AdicionarResposta) {
-    const response = await axios.post(`${API_URL}/resposta`, data)
+    const response = await axios.post(`${API_URL}/voto`, data)
     return response
 }
 
 async function listarRespostas(enquete_id: string) {
-    return await axios.get(`${API_URL}/resposta/listar-por-enquete/${enquete_id}`)
+    return await axios.get(`${API_URL}/voto/listar-por-enquete/${enquete_id}`)
 }
 
 export const api = {

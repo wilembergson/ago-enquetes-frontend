@@ -5,17 +5,17 @@ import { Doughnut } from 'react-chartjs-2';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 type Props = {
-    aprovados?: number,
-    reprovados?: number,
-    abstencoes?: number
+    aprovar?: number,
+    reprovar?: number,
+    abster?: number
 }
 
-export default function CircleChart({ aprovados, reprovados, abstencoes }: Props) {
+export default function CircleChart({ aprovar, reprovar, abster }: Props) {
     const data = {
         datasets: [
             {
                 label: 'Votos',
-                data: [aprovados, reprovados, abstencoes],
+                data: [aprovar, reprovar, abster],
                 backgroundColor: [
                     'rgb(22 163 74)',
                     'rgb(220 38 38)',

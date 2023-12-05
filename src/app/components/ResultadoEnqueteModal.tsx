@@ -52,7 +52,7 @@ export default function ResultadoEnqueteModal({ isVisible, setVisible, enquete }
         let rep:number = 0
         let abst:number = 0
         votos.forEach(item => {
-            if(item.conteudo === 'APROVADO'){
+            if(item.conteudo === 'APROVAR'){
                 ap += 1
             } else if(item.conteudo === 'REPROVAR'){
                 rep += 1
@@ -96,12 +96,12 @@ export default function ResultadoEnqueteModal({ isVisible, setVisible, enquete }
                     </section>
                     <section className="flex w-1/2 justify-center py-20">
                         <div className="flex font-black flex-col mr-10">
-                            <h1 className="text-green-500 text-xl">APROVADO: {aprovar}</h1>
-                            <h1 className="text-red-500 text-xl">REPROVADO: {reprovar}</h1>
+                            <h1 className="text-green-500 text-xl">APROVAR: {aprovar}</h1>
+                            <h1 className="text-red-500 text-xl">REPROVAR: {reprovar}</h1>
                             <h1 className="text-yellow-500 text-xl">ABSTER: {abster}</h1>
                             <h1 className="text-gray-500 text-3xl mt-10">TOTAL: {respostas?.length}</h1>
                         </div>
-                        <CircleChart aprovados={aprovar} reprovados={reprovar} abstencoes={abster}/>
+                        <CircleChart aprovar={aprovar} reprovar={reprovar} abster={abster}/>
                     </section>
                 </div>
                 <div className="flex w-full justify-center">
