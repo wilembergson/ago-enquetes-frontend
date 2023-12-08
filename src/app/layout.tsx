@@ -6,7 +6,7 @@ import { GlobalContextProvider } from './context/ContextoEnqueteAtiva'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Enquetes',
+  title: 'AGO - Enquetes',
 }
 
 export default function RootLayout({

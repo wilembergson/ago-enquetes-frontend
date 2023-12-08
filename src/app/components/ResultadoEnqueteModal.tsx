@@ -47,16 +47,16 @@ export default function ResultadoEnqueteModal({ isVisible, setVisible, enquete }
         }
     }
 
-    function obterResultados(votos:any[]) {
-        let ap:number = 0
-        let rep:number = 0
-        let abst:number = 0
+    function obterResultados(votos: any[]) {
+        let ap: number = 0
+        let rep: number = 0
+        let abst: number = 0
         votos.forEach(item => {
-            if(item.conteudo === 'APROVAR'){
+            if (item.conteudo === 'APROVAR') {
                 ap += 1
-            } else if(item.conteudo === 'REPROVAR'){
+            } else if (item.conteudo === 'REPROVAR') {
                 rep += 1
-            }else {
+            } else {
                 abst += 1
             }
         })
@@ -71,18 +71,12 @@ export default function ResultadoEnqueteModal({ isVisible, setVisible, enquete }
 
     return (
         <Modal isVisible={isVisible}>
-            <div className="flex flex-col bg-white text-gray-700 w-4/5 h-5/6 shadow-lg" data-aos="zoom-in">
+            <div className="flex relative flex-col bg-white text-gray-700 w-4/5 h-5/6 shadow-lg" data-aos="zoom-in">
                 <h1 className="`flex font-black text-white text-lg p-2 bg-red-500">
                     Resultado da enquete
                 </h1>
                 <div className="flex">
                     <section className="flex flex-col w-1/2 p-4">
-                        <div className="flex flex-col">
-                            <h2 className=" font-black">Pergunta:</h2>
-                            <h1 className="flex text-xl">
-                                {enquete.pergunta}
-                            </h1>
-                        </div>
                         <div className="flex flex-col mt-4">
                             <h2 className=" font-black">Data e hora:</h2>
                             <h1 className="flex text-xl">
@@ -94,17 +88,37 @@ export default function ResultadoEnqueteModal({ isVisible, setVisible, enquete }
                             {respostas?.map(item => <ItemResposta resposta={item} />)}
                         </div>
                     </section>
-                    <section className="flex w-1/2 justify-center py-20">
-                        <div className="flex font-black flex-col mr-10">
-                            <h1 className="text-green-500 text-xl">APROVAR: {aprovar}</h1>
-                            <h1 className="text-red-500 text-xl">REPROVAR: {reprovar}</h1>
-                            <h1 className="text-yellow-500 text-xl">ABSTER: {abster}</h1>
-                            <h1 className="text-gray-500 text-3xl mt-10">TOTAL: {respostas?.length}</h1>
+                    <section className="flex flex-col w-1/2 p-6">
+                        <div className="flex flex-col">
+                            <h1 className="flex text-xl font-black">
+                                {enquete.pergunta}
+                            </h1>
+                            <section className="flex mt-6 justify-center">
+                                {(aprovar! === reprovar!) ? <h1 className="text-gray-500 text-4xl font-black rounded-lg bg-gray-200 p-2">
+                                    EMPATE
+                                </h1>
+                                    : (aprovar! > reprovar!)
+                                        ? <h1 className="text-green-500 text-4xl font-black rounded-lg bg-green-200 p-2">
+                                            APROVAR
+                                        </h1>
+                                        : <h1 className="text-red-500 text-4xl font-black rounded-lg bg-red-200 p-2">
+                                            REPROVAR
+                                        </h1>
+                                }
+                            </section>
                         </div>
-                        <CircleChart aprovar={aprovar} reprovar={reprovar} abster={abster}/>
+                        <div className="flex mt-10 justify-center">
+                            <div className="flex font-black flex-col mr-10">
+                                <h1 className="text-green-500 text-lg">APROVAR: {aprovar}</h1>
+                                <h1 className="text-red-500 text-lg">REPROVAR: {reprovar}</h1>
+                                <h1 className="text-yellow-500 text-lg">ABSTER: {abster}</h1>
+                                <h1 className="text-gray-500 text-2xl mt-10">TOTAL: {respostas?.length}</h1>
+                            </div>
+                            <CircleChart aprovar={aprovar} reprovar={reprovar} abster={abster} />
+                        </div>
                     </section>
                 </div>
-                <div className="flex w-full justify-center">
+                <div className="absolute bottom-4 w-full flex items-center justify-center">
                     <button className={botaoStyle("bg-blue-500")}
                         onClick={() => setVisible(false)}>
                         OK
