@@ -77,14 +77,14 @@ export default function ResultadoEnqueteModal({ isVisible, setVisible, enquete }
                 </h1>
                 <div className="flex">
                     <section className="flex flex-col w-1/2 p-4">
-                        <div className="flex flex-col mt-4">
+                        <div className="flex flex-col">
                             <h2 className=" font-black">Data e hora:</h2>
                             <h1 className="flex text-xl">
                                 {enquete.data_e_hora}
                             </h1>
                         </div>
-                        <div className="flex flex-col mt-4 h-72 overflow-y-scroll pr-2">
-                            <h2 className=" font-black">Respostas:</h2>
+                        <h2 className=" font-black mt-4">Respostas:</h2>
+                        <div className="flex flex-col h-[360px] overflow-y-scroll pr-2">
                             {respostas?.map(item => <ItemResposta resposta={item} />)}
                         </div>
                     </section>
