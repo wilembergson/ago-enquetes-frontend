@@ -11,6 +11,8 @@ type Resposta = {
 
 export default function ItemResposta({resposta}:Props){
     const {conteudo, crm, nome, data_hora} = resposta
+    const hora  = `${data_hora[3] < 10 ? '0' : ''}${data_hora[3]}:${data_hora[4] < 10 ? '0' : ''}${data_hora[4]}h`
+
     return(
         <section className="flex bg-blue-100 rounded-lg p-2 my-2 justify-between">
             <div className="flex flex-col mx-2">
@@ -27,7 +29,7 @@ export default function ItemResposta({resposta}:Props){
             </div>
             <div className="flex flex-col mx-2">
                 <h1 className="font-black">Hora</h1>
-                <h2>{`${data_hora[3]}:${data_hora[4]}h`}</h2>
+                <h2>{hora}</h2>
             </div>
         </section>
     )

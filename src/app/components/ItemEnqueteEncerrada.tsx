@@ -9,7 +9,7 @@ type Props = {
 
 export default function ItemEnqueteEncerrada({ id, pergunta, data_hora }: Props) {
     const [showModal, setShowModal] = useState(false)
-    const data_e_hora  = `${data_hora[2]}/${data_hora[1]}/${data_hora[0]} às ${data_hora[3] < 10 ? '0' : ''}${data_hora[3]}:${data_hora[4] < 10 ? '0' : ''}${data_hora[4]}h`
+    const data_e_hora  = `${data_hora[2] < 10 ? '0' : ''}${data_hora[2]}/${data_hora[1]}/${data_hora[0]} às ${data_hora[3] < 10 ? '0' : ''}${data_hora[3]}:${data_hora[4] < 10 ? '0' : ''}${data_hora[4]}h`
     
     return (
         <>
