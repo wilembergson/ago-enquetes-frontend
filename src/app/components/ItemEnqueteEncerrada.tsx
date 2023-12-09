@@ -19,7 +19,7 @@ export default function ItemEnqueteEncerrada({ id, pergunta, data_hora }: Props)
                 <h2 className="flex font-black text-gray-700">
                     {pergunta}
                 </h2>
-                <h3 className="flex text-sm text-gray-600">
+                <h3 className="flex text-sm text-gray-600 mt-2 justify-end">
                     Iniciada em: {data_e_hora}
                 </h3>
             </section>

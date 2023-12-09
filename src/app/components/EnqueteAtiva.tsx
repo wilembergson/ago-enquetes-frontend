@@ -6,6 +6,7 @@ import ItemPrincipal from './ItemPrincipal'
 import { botaoStyle } from '../utils/botao-style'
 import alerts from '../utils/alerts'
 import UpdateEnqueteModal from './UpdateEnqueteModal'
+import Countdown, { zeroPad } from 'react-countdown'
 
 
 export default function EnqueteAtiva() {
@@ -57,6 +58,19 @@ export default function EnqueteAtiva() {
                         <h3 className='flex font-black text-lg text-gray-700'>
                             {enquete.pergunta}
                         </h3>
+                        <h3 className='flex font-black text-lg text-gray-700'>
+                            {enquete.tempo}
+                        </h3>
+                        <Countdown
+                            date={Date.now() + (enquete.tempo * 60000)}
+                            intervalDelay={0}
+                            precision={2}
+                            renderer={({ hours, minutes, seconds }) => (
+                                <span>
+                                  {zeroPad(minutes)}:{zeroPad(seconds)}
+                                </span>
+                              )}
+                        />
                         <div className='flex w-full mt-4'>
                             <button className={botaoStyle('bg-blue-500')}
                                 onClick={() => setShowUpdateEnquete(true)}>
@@ -72,7 +86,7 @@ export default function EnqueteAtiva() {
                         Sem enquetes ativas no momento
                     </h1>}
             </ItemPrincipal>
-            <UpdateEnqueteModal isVisible={showUpdateEnquete} setVisible={() => setShowUpdateEnquete(false)}/>
+            <UpdateEnqueteModal isVisible={showUpdateEnquete} setVisible={() => setShowUpdateEnquete(false)} />
         </>
     )
 }
