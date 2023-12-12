@@ -49,7 +49,7 @@ export default function CriarEnqueteForm() {
 
     return (
         <ItemPrincipal titulo='Nova enquete' cor='bg-green-500'>
-            <form className='flex flex-col p-4 bg-white'
+            <form className='flex flex-col p-4 bg-white rounded-lg'
                 action={confirmarNovaEnquete}>
                 <textarea className='flex mb-4 bg-gray-100 p-2 rounded-md'
                     placeholder='Digite uma nova pergunta'

@@ -76,7 +76,7 @@ export default function EnqueteAtiva() {
         event.preventDefault()
         alerts.ConfirmarAlert(
             atualizarEnquete,
-            'Cofirmar atualização?',
+            'Estender o tempo da enquete?',
             'As mudanças seram exibidas na votação.'
         )
     }
@@ -84,13 +84,6 @@ export default function EnqueteAtiva() {
     async function atualizarEnquete() {
         try {
             const response = await api.atualizarEnquete(parseFloat(tempo!))
-            /*setEnqueteAtiva({
-                id: enqueteAtiva?.id!,
-                pergunta: enqueteAtiva!.pergunta!,
-                tempo: enquete.tempo,
-                ativo: enqueteAtiva?.ativo!,
-                data_hora: enqueteAtiva?.data_hora!
-            })*/
             alerts.SucessoAlert(response.data.mensagem)
             await obterEnqueteAtiva()
             setTempo('')
@@ -122,26 +115,24 @@ export default function EnqueteAtiva() {
                             {enquete.pergunta}
                         </h3>
 
-                        <form className='flex items-center'
+                        <form className='flex items-center mt-8 w-1/2 justify-between'
                             onSubmit={confirmarAtualizacao}>
                             {countdownComponent}
-                            <input className='flex ml-10 mr-2 w-20 bg-gray-100 p-2 rounded-md'
-                                type="number"
-                                placeholder='tempo'
-                                name='tempo'
-                                onChange={(e: any) => handleChange(e)}
-                                value={tempo!}
-                                required
-                            />
-                            <button className={botaoStyle('bg-blue-500 h-auto items-center font-black text-3xl px-4 py--2')}>
-                                +
-                            </button>
+                            <div className='flex justify-between'>
+                                <input className='flex w-20 bg-gray-200 p-2 rounded-md'
+                                    type="number"
+                                    placeholder='tempo'
+                                    name='tempo'
+                                    onChange={(e: any) => handleChange(e)}
+                                    value={tempo!}
+                                    required
+                                />
+                                <button className={botaoStyle('bg-blue-500 h-auto items-center font-black text-3xl px-4')}>
+                                    +
+                                </button>
+                            </div>
                         </form>
                         <div className='flex w-full mt-4'>
-                            {/*<button className={botaoStyle('bg-blue-500')}
-                                onClick={() => setShowUpdateEnquete(true)}>
-                                Editar
-                </button>*/}
                             <button className={botaoStyle('bg-yellow-400')}
                                 onClick={confirmarEncerramentoEnquete}>
                                 Encerrar

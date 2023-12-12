@@ -7,9 +7,9 @@ type Props = {
 }
 
 export default function ItemPrincipal({titulo, cor, children}: Props){
-    const tituloStyle = `flex font-black text-white text-lg p-2 ${cor}`
+    const tituloStyle = `flex font-black text-white text-lg p-2 rounded-t-lg ${cor}`
     return(
-        <div className='flex font-principal flex-col mt-10 shadow-lg w-full'>
+        <div className='flex font-principal flex-col bg-white mt-10 rounded-lg shadow-lg w-full'>
             <h1 className={tituloStyle}>
                 {titulo}
             </h1>
