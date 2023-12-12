@@ -1,12 +1,13 @@
 'useClient'
 import { api } from '@/api/api-conections'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useGlobalContext } from '../context/ContextoEnqueteAtiva'
 import ItemPrincipal from './ItemPrincipal'
 import { botaoStyle } from '../utils/botao-style'
 import alerts from '../utils/alerts'
 import UpdateEnqueteModal from './UpdateEnqueteModal'
 import Countdown, { zeroPad } from 'react-countdown'
+import { randomUUID } from 'crypto'
 
 
 export default function EnqueteAtiva() {
@@ -14,11 +15,38 @@ export default function EnqueteAtiva() {
     const [enquete, setEnquete] = useState<any>(null)
     const { enqueteAtiva, setEnqueteAtiva } = useGlobalContext()
     const [showUpdateEnquete, setShowUpdateEnquete] = useState(false)
+    const [countdown, setCountdown] = useState(0)
+    const [tempo, setTempo] = useState<string>('')
+
+    const handleChange = useCallback((e: any) => {
+        e.preventDefault();
+        setTempo(e.target.value);
+    }, [])
+
+    const countdownComponent = useMemo(() => (
+        <Countdown
+            date={Date.now() + countdown}
+            intervalDelay={0}
+            precision={2}
+            renderer={({ minutes, seconds }) => (
+                <span className='flex font-black text-2xl text-blue-600 mt-2'>
+                    {zeroPad(minutes)}:{zeroPad(seconds)}
+                </span>
+            )}
+        />
+    ), [countdown]);
+
+
 
     async function obterEnqueteAtiva() {
         try {
             const response = await api.buscarEnqueteAtiva()
             setEnquete(response.data)
+            const tempo = localStorage.getItem('cronometro')
+            if (response.data) {
+                setCountdown(response.data.tempo * 60000)
+                localStorage.setItem('cronometro', (response.data.tempo * 60000).toString())
+            }
         } catch (error: any) {
             alert(error)
             alerts.ErrorAlert(error.response.data.mensagem)
@@ -32,9 +60,7 @@ export default function EnqueteAtiva() {
             'Ao confirmar, não será mais possível votar.'
         )
     }
-    async function teste() {
-        alert("testando")
-    }
+
     async function encerrarEnquete() {
         try {
             const response = await api.encerrarEnquete()
@@ -45,6 +71,43 @@ export default function EnqueteAtiva() {
             alerts.ErrorAlert(error.response.data.mensagem)
         }
     }
+
+    function confirmarAtualizacao(event: any) {
+        event.preventDefault()
+        alerts.ConfirmarAlert(
+            atualizarEnquete,
+            'Cofirmar atualização?',
+            'As mudanças seram exibidas na votação.'
+        )
+    }
+
+    async function atualizarEnquete() {
+        try {
+            const response = await api.atualizarEnquete(parseFloat(tempo!))
+            /*setEnqueteAtiva({
+                id: enqueteAtiva?.id!,
+                pergunta: enqueteAtiva!.pergunta!,
+                tempo: enquete.tempo,
+                ativo: enqueteAtiva?.ativo!,
+                data_hora: enqueteAtiva?.data_hora!
+            })*/
+            alerts.SucessoAlert(response.data.mensagem)
+            await obterEnqueteAtiva()
+            setTempo('')
+        } catch (error: any) {
+            alert(error)
+            alerts.ErrorAlert(error.response.data.mensagem)
+        }
+    }
+
+    useEffect(() => {
+        const intervalo = setTimeout(() => {
+            const novoTempo = parseFloat(localStorage.getItem('cronometro')!) - 1000
+            localStorage.clear()
+            localStorage.setItem('cronometro', novoTempo.toString())
+        }, 1000)
+        return () => clearInterval(intervalo)
+    }, [])
 
     useEffect(() => {
         obterEnqueteAtiva()
@@ -58,24 +121,27 @@ export default function EnqueteAtiva() {
                         <h3 className='flex font-black text-lg text-gray-700'>
                             {enquete.pergunta}
                         </h3>
-                        <h3 className='flex font-black text-lg text-gray-700'>
-                            {enquete.tempo}
-                        </h3>
-                        <Countdown
-                            date={Date.now() + (enquete.tempo * 60000)}
-                            intervalDelay={0}
-                            precision={2}
-                            renderer={({ hours, minutes, seconds }) => (
-                                <span>
-                                  {zeroPad(minutes)}:{zeroPad(seconds)}
-                                </span>
-                              )}
-                        />
+
+                        <form className='flex items-center'
+                            onSubmit={confirmarAtualizacao}>
+                            {countdownComponent}
+                            <input className='flex ml-10 mr-2 w-20 bg-gray-100 p-2 rounded-md'
+                                type="number"
+                                placeholder='tempo'
+                                name='tempo'
+                                onChange={(e: any) => handleChange(e)}
+                                value={tempo!}
+                                required
+                            />
+                            <button className={botaoStyle('bg-blue-500 h-auto items-center font-black text-3xl px-4 py--2')}>
+                                +
+                            </button>
+                        </form>
                         <div className='flex w-full mt-4'>
-                            <button className={botaoStyle('bg-blue-500')}
+                            {/*<button className={botaoStyle('bg-blue-500')}
                                 onClick={() => setShowUpdateEnquete(true)}>
                                 Editar
-                            </button>
+                </button>*/}
                             <button className={botaoStyle('bg-yellow-400')}
                                 onClick={confirmarEncerramentoEnquete}>
                                 Encerrar

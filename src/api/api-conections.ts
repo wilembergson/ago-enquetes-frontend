@@ -31,8 +31,8 @@ async function buscarEnquetesEncerradas() {
 }
 
 
-async function atualizarEnquete(data: NovaEnquete) {
-    const response = await axios.put(`${API_URL}/enquete/atualizar`, data)
+async function atualizarEnquete(tempo: number) {
+    const response = await axios.put(`${API_URL}/enquete/atualizar/${tempo}`)
     return response
 }
 

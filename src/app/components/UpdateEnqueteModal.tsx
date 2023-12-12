@@ -11,7 +11,6 @@ type Props = {
 }
 
 type UpdateEnquete = {
-    pergunta: string;
     tempo: number;
 }
 
@@ -19,9 +18,8 @@ export default function UpdateEnqueteModal({ isVisible, setVisible }: Props) {
     const { enqueteAtiva, setEnqueteAtiva } = useGlobalContext()
 
     const [enquete, setEnquete] = useState<UpdateEnquete>({
-        pergunta: enqueteAtiva?.pergunta!,
         tempo: enqueteAtiva?.tempo!
-    } )
+    })
 
     function handleChange({ target }: any) {
         setEnquete({ ...enquete, [target.name]: target.value })
@@ -31,7 +29,6 @@ export default function UpdateEnqueteModal({ isVisible, setVisible }: Props) {
         try {
             const response = await api.buscarEnqueteAtiva()
             setEnquete({
-                pergunta: response.data.pergunta,
                 tempo: response ? response.data.tempo : ''
             })
         } catch (error: any) {
@@ -40,7 +37,7 @@ export default function UpdateEnqueteModal({ isVisible, setVisible }: Props) {
         }
     }
 
-    function confirmarAtualizacao(event:any){
+    function confirmarAtualizacao(event: any) {
         event.preventDefault()
         alerts.ConfirmarAlert(
             atualizarEnquete,
@@ -51,13 +48,10 @@ export default function UpdateEnqueteModal({ isVisible, setVisible }: Props) {
 
     async function atualizarEnquete() {
         try {
-            const response = await api.atualizarEnquete({
-                pergunta: enquete.pergunta!,
-                tempo: enquete?.tempo!
-            })
+            const response = await api.atualizarEnquete(enquete?.tempo!)
             setEnqueteAtiva({
                 id: enqueteAtiva?.id!,
-                pergunta: enquete.pergunta!,
+                pergunta: enqueteAtiva!.pergunta!,
                 tempo: enquete.tempo,
                 ativo: enqueteAtiva?.ativo!,
                 data_hora: enqueteAtiva?.data_hora!
@@ -82,13 +76,13 @@ export default function UpdateEnqueteModal({ isVisible, setVisible }: Props) {
                 </h1>
                 <form className='flex flex-col p-4 bg-white'
                     onSubmit={confirmarAtualizacao}>
-                    <textarea className='flex mb-4 bg-gray-100 p-2 rounded-md'
+                    {/*<textarea className='flex mb-4 bg-gray-100 p-2 rounded-md'
                         placeholder='Digite uma nova pergunta'
                         name='pergunta'
                         onChange={(e: any) => handleChange(e)}
                         value={enquete.pergunta}
                         required
-                    />
+    />*/}
                     <input className='flex mb-4 bg-gray-100 p-2 rounded-md'
                         type="number"
                         placeholder='Duração (em minutos)'
@@ -98,7 +92,7 @@ export default function UpdateEnqueteModal({ isVisible, setVisible }: Props) {
                         required
                     />
                     <div className="flex">
-                    <button className={botaoStyle("bg-blue-500")}>
+                        <button className={botaoStyle("bg-blue-500")}>
                             Confirmar
                         </button>
                         <button className={botaoStyle("bg-red-500")}
