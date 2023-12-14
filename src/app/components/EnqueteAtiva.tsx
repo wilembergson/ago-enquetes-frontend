@@ -7,7 +7,6 @@ import { botaoStyle } from '../utils/botao-style'
 import alerts from '../utils/alerts'
 import UpdateEnqueteModal from './UpdateEnqueteModal'
 import Countdown, { zeroPad } from 'react-countdown'
-import { randomUUID } from 'crypto'
 
 
 export default function EnqueteAtiva() {

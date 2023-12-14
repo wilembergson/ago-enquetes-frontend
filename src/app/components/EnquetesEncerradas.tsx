@@ -25,6 +25,7 @@ export default function EnquetesEncerradas() {
 
     return (
         <ItemPrincipal titulo={`Enquetes encerradas (${enquetes?.length})`} cor='bg-red-500'>
+            <button onClick={() => listarEnquetes()}>atualizar</button>
             {(enquetes?.length !== 0) ? enquetes?.map(item =>
                 <ItemEnqueteEncerrada
                     key={item.id}
