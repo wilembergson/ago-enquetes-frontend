@@ -19,15 +19,15 @@ type Enquete = {
     data_e_hora: string
 }
 
-type Resposta = {
+type Voto = {
     id: string
-    conteudo: string
+    resposta: string
     crm: string
     nome: string
     data_hora: number[]
 }
 export default function ResultadoEnqueteModal({ isVisible, setVisible, enquete }: Props) {
-    const [respostas, setRespostas] = useState<Resposta[]>()
+    const [respostas, setRespostas] = useState<Voto[]>()
     const [aprovar, setAprovar] = useState<number>()
     const [reprovar, setReprovar] = useState<number>()
     const [abster, setAbster] = useState<number>()
@@ -52,9 +52,9 @@ export default function ResultadoEnqueteModal({ isVisible, setVisible, enquete }
         let rep: number = 0
         let abst: number = 0
         votos.forEach(item => {
-            if (item.conteudo === 'APROVAR') {
+            if (item.resposta === 'APROVAR') {
                 ap += 1
-            } else if (item.conteudo === 'REPROVAR') {
+            } else if (item.resposta === 'REPROVAR') {
                 rep += 1
             } else {
                 abst += 1
@@ -85,7 +85,7 @@ export default function ResultadoEnqueteModal({ isVisible, setVisible, enquete }
                         </div>
                         <h2 className=" font-black mt-4">Votação:</h2>
                         <div className="flex flex-col h-[360px] overflow-y-scroll pr-2">
-                            {respostas?.map(item => <ItemResposta resposta={item} />)}
+                            {respostas?.map(item => <ItemResposta voto={item} />)}
                         </div>
                     </section>
                     <section className="flex flex-col w-1/2 p-6">

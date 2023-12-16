@@ -24,7 +24,7 @@ export default function CircleChart({ aprovar, reprovar, abster }: Props) {
                 borderColor: [
                     'green',
                     'red',
-                    'yellow'
+                    '#F6EE00'
                 ],
                 borderWidth: 1,
             },
