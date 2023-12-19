@@ -10,7 +10,7 @@ type NovaEnquete = {
 type AdicionarResposta = {
     resposta: string
     crm: string
-    id_enquete:string
+    id_enquete: string
 }
 
 async function criarNovaEnquete(data: NovaEnquete) {
@@ -41,8 +41,16 @@ async function adicionarResposta(data: AdicionarResposta) {
     return response
 }
 
-async function listarRespostas(enquete_id: string) {
+async function listarRespostas(enquete_id: number) {
     return await axios.get(`${API_URL}/voto/listar-por-enquete/${enquete_id}`)
+}
+
+async function atualizarResultadoStatus(id_enquete: number, status: number) {
+    return await axios.put(`${API_URL}/enquete/atualizar-resultado-status/${id_enquete}`,
+        {
+            status
+        }
+    )
 }
 
 export const api = {
@@ -52,5 +60,6 @@ export const api = {
     adicionarResposta,
     atualizarEnquete,
     buscarEnquetesEncerradas,
-    listarRespostas
+    listarRespostas,
+    atualizarResultadoStatus
 }

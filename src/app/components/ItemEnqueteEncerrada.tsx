@@ -2,12 +2,14 @@ import { useState } from "react"
 import ResultadoEnqueteModal from "./ResultadoEnqueteModal"
 
 type Props = {
-    id: string
+    id: number
     pergunta: string
+    exibirResultado:number
     data_hora: number[]
+    atualizarLista: () => any
 }
 
-export default function ItemEnqueteEncerrada({ id, pergunta, data_hora }: Props) {
+export default function ItemEnqueteEncerrada({ id, pergunta, exibirResultado, data_hora, atualizarLista }: Props) {
     const [showModal, setShowModal] = useState(false)
     const data_e_hora  = `${data_hora[2] < 10 ? '0' : ''}${data_hora[2]}/${data_hora[1]}/${data_hora[0]} às ${data_hora[3] < 10 ? '0' : ''}${data_hora[3]}:${data_hora[4] < 10 ? '0' : ''}${data_hora[4]}h`
     
@@ -26,7 +28,8 @@ export default function ItemEnqueteEncerrada({ id, pergunta, data_hora }: Props)
             <ResultadoEnqueteModal
                 isVisible={showModal}
                 setVisible={() => setShowModal(false)}
-                enquete={{ id, pergunta, data_e_hora }} />
+                enquete={{ id, pergunta, exibirResultado, data_e_hora }} 
+                atualizarLista={() => atualizarLista()}/>
         </>
     )
 }

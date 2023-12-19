@@ -11,7 +11,6 @@ export default function EnquetesEncerradas() {
     async function listarEnquetes() {
         try {
             const lista = await api.buscarEnquetesEncerradas()
-            console.log(lista.data)
             setEnquetes(lista.data)
         } catch (error: any) {
             alert(error.response.data.mensagem)
@@ -31,7 +30,9 @@ export default function EnquetesEncerradas() {
                     key={item.id}
                     id={item.id}
                     pergunta={item.pergunta}
+                    exibirResultado={item.exibirResultado}
                     data_hora={item.data_hora}
+                    atualizarLista={() => listarEnquetes()}
                 />)
                 : <h1 className='flex text-gray-400 text-2xl h-full justify-center items-center'>
                     Nenhuma enquete finalizada por enquanto.
@@ -41,9 +42,10 @@ export default function EnquetesEncerradas() {
 }
 
 type Enquete = {
-    id: string
+    id: number
     pergunta: string
     tempo: number
     ativo: number
+    exibirResultado: number
     data_hora: number[]
 }

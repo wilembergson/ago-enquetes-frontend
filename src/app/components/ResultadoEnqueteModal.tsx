@@ -9,13 +9,15 @@ import CircleChart from "./circle-chart";
 
 type Props = {
     isVisible: boolean
-    setVisible?: any,
+    setVisible?: any
     enquete: Enquete
+    atualizarLista: () => any
 }
 
 type Enquete = {
-    id: string
+    id: number
     pergunta: string
+    exibirResultado: number
     data_e_hora: string
 }
 
@@ -24,25 +26,40 @@ type Voto = {
     resposta: string
     crm: string
     nome: string
+    exibirResultado: number
     data_hora: number[]
 }
-export default function ResultadoEnqueteModal({ isVisible, setVisible, enquete }: Props) {
+
+export default function ResultadoEnqueteModal({ isVisible, setVisible, enquete, atualizarLista }: Props) {
     const [respostas, setRespostas] = useState<Voto[]>()
     const [aprovar, setAprovar] = useState<number>()
     const [reprovar, setReprovar] = useState<number>()
     const [abster, setAbster] = useState<number>()
 
-    /*function handleChange({ target }: any) {
-        setEnquete({ ...enquete, [target.name]: target.value })
-    }*/
-
     async function obterRespostas() {
         try {
             const response = await api.listarRespostas(enquete.id)
+            console.log(response.data)
+            setExibirResultado(enquete.exibirResultado)
+            if (enquete.exibirResultado === 0) {
+                setAtivo(false)
+            } else {
+                setAtivo(true)
+            }
             setRespostas(response.data)
             obterResultados(response.data)
         } catch (error: any) {
             alert(error)
+            alerts.ErrorAlert(error.response.data.mensagem)
+        }
+    }
+
+    async function atualizarResultadoStatus(status: number, ativo: boolean) {
+        try {
+            const res = await api.atualizarResultadoStatus(enquete.id, status)
+            console.log(res.data)
+            setAtivo(ativo)
+        } catch (error: any) {
             alerts.ErrorAlert(error.response.data.mensagem)
         }
     }
@@ -65,9 +82,21 @@ export default function ResultadoEnqueteModal({ isVisible, setVisible, enquete }
         setAbster(abst)
     }
 
+    const [ativo, setAtivo] = useState(true);
+    const [exibirResultado, setExibirResultado] = useState(0)
+
+    const handleToggle = async () => {
+        if (ativo) {
+            await atualizarResultadoStatus(0, false)
+        } else {
+            await atualizarResultadoStatus(1, true)
+        }
+        atualizarLista()
+    }
+
     useEffect(() => {
         obterRespostas()
-    }, [])
+    }, [enquete.exibirResultado])
 
     return (
         <Modal isVisible={isVisible}>
@@ -116,6 +145,12 @@ export default function ResultadoEnqueteModal({ isVisible, setVisible, enquete }
                             </div>
                             <CircleChart aprovar={aprovar} reprovar={reprovar} abster={abster} />
                         </div>
+
+                        <label className="relative inline-flex items-center cursor-pointer mt-6">
+                            <input type="checkbox" checked={ativo} onChange={handleToggle} value={exibirResultado} className="sr-only peer" />
+                            <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                            <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Exibir resultado na transmisão</span>
+                        </label>
                     </section>
                 </div>
                 <div className="absolute bottom-4 w-full flex items-center justify-center">
