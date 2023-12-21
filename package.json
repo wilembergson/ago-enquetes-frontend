@@ -4,11 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:4000": "next dev -p 4000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/aos": "^3.0.7",
     "aos": "^2.3.4",
     "axios": "^1.6.2",
     "js-cookie": "^3.0.5",
