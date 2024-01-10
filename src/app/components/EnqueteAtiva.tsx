@@ -8,14 +8,14 @@ import alerts from '../utils/alerts'
 import UpdateEnqueteModal from './UpdateEnqueteModal'
 import Countdown, { zeroPad } from 'react-countdown'
 
-
 export default function EnqueteAtiva() {
 
     const [enquete, setEnquete] = useState<any>(null)
     const { enqueteAtiva, setEnqueteAtiva } = useGlobalContext()
     const [showUpdateEnquete, setShowUpdateEnquete] = useState(false)
-    const [countdown, setCountdown] = useState(0)
+    const [dataCronometro, setDataCronometro] = useState<Date>()
     const [tempo, setTempo] = useState<string>('')
+    const [key, setKey] = useState(0);
 
     const handleChange = useCallback((e: any) => {
         e.preventDefault();
@@ -24,7 +24,8 @@ export default function EnqueteAtiva() {
 
     const countdownComponent = useMemo(() => (
         <Countdown
-            date={Date.now() + countdown}
+            key={key}
+            date={dataCronometro}
             intervalDelay={0}
             precision={2}
             renderer={({ minutes, seconds }) => (
@@ -33,23 +34,25 @@ export default function EnqueteAtiva() {
                 </span>
             )}
         />
-    ), [countdown]);
+    ), [dataCronometro, key]);
 
 
 
     async function obterEnqueteAtiva() {
         try {
-            const response = await api.buscarEnqueteAtiva()
-            setEnquete(response.data)
-            const tempo = localStorage.getItem('cronometro')
-            if (response.data) {
-                setCountdown(response.data.tempo * 60000)
-                localStorage.setItem('cronometro', (response.data.tempo * 60000).toString())
-            }
+            const res = await api.buscarEnqueteAtiva()
+            setEnquete(res.data)
+            await buscarCountdown(res.data.data_cronometro)
         } catch (error: any) {
             alert(error)
             alerts.ErrorAlert(error.response.data.mensagem)
         }
+    }
+
+    async function buscarCountdown(data_cronometro: number[]) {
+            const nova_data = new Date()
+            nova_data.setHours(data_cronometro[3], data_cronometro[4], data_cronometro[5])
+            setDataCronometro(nova_data)
     }
 
     function confirmarEncerramentoEnquete() {
@@ -93,17 +96,13 @@ export default function EnqueteAtiva() {
     }
 
     useEffect(() => {
-        const intervalo = setTimeout(() => {
-            const novoTempo = parseFloat(localStorage.getItem('cronometro')!) - 1000
-            localStorage.clear()
-            localStorage.setItem('cronometro', novoTempo.toString())
-        }, 1000)
-        return () => clearInterval(intervalo)
-    }, [])
-
-    useEffect(() => {
         obterEnqueteAtiva()
     }, [enqueteAtiva])
+
+    useEffect(() => {
+        // Incrementando a chave para forçar a recriação do Countdown
+        setKey((prevKey) => prevKey + 1);
+    }, [dataCronometro]);
 
     return (
         <>
@@ -136,6 +135,7 @@ export default function EnqueteAtiva() {
                                 onClick={confirmarEncerramentoEnquete}>
                                 Encerrar
                             </button>
+
                         </div>
                     </section>
                     : <h1 className='flex justify-center text-gray-500 p-10 text-lg'>
