@@ -6,6 +6,7 @@ import { api } from "@/api/api-conections";
 import alerts from "../utils/alerts";
 import ItemResposta from "./ItemResposta";
 import CircleChart from "./circle-chart";
+import jsPDF from "jspdf";
 
 type Props = {
     isVisible: boolean
@@ -29,6 +30,8 @@ type Voto = {
     exibirResultado: number
     data_hora: number[]
 }
+
+
 
 export default function ResultadoEnqueteModal({ isVisible, setVisible, enquete, atualizarLista }: Props) {
     const [respostas, setRespostas] = useState<Voto[]>()
@@ -98,6 +101,26 @@ export default function ResultadoEnqueteModal({ isVisible, setVisible, enquete, 
         obterRespostas()
     }, [enquete.exibirResultado])
 
+    const relatorio = (lista:any[]) => {
+        const pdf = new jsPDF();
+      
+        // Título do PDF
+        pdf.text('Relatório', 10, 10);
+      
+        // Loop através do array de objetos e adiciona as informações ao PDF
+        lista.forEach((item, index) => {
+          const yPos = 20 + index * 10;
+          pdf.text(`${item.resposta}: ${item.nome}: ${item.crm}: ${item.data_hora}`, 10, yPos);
+        });
+      
+        // Salva o PDF ou exibe no navegador
+        pdf.save('relatorio.pdf');
+      };
+
+    function gerarPDF(){
+        relatorio(respostas!)
+    }
+
     return (
         <Modal isVisible={isVisible}>
             <div className="flex relative flex-col bg-white text-gray-700 w-4/5 h-5/6 shadow-lg" data-aos="zoom-in">
@@ -112,7 +135,12 @@ export default function ResultadoEnqueteModal({ isVisible, setVisible, enquete, 
                                 {enquete.data_e_hora}
                             </h1>
                         </div>
-                        <h2 className=" font-black mt-4">Votação:</h2>
+                        <div>
+                            <h2 className=" font-black mt-4">Votação:</h2>
+                            <button onClick={gerarPDF} className="cursor-pointer">
+                                PDF
+                            </button>
+                        </div>
                         <div className="flex flex-col h-[360px] overflow-y-scroll pr-2">
                             {respostas?.map(item => <ItemResposta voto={item} />)}
                         </div>

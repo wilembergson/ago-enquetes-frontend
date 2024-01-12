@@ -135,7 +135,7 @@ export default function EnqueteAtiva() {
                                 onClick={confirmarEncerramentoEnquete}>
                                 Encerrar
                             </button>
-
+                        <h1>{(new Date()).toLocaleTimeString()}</h1>
                         </div>
                     </section>
                     : <h1 className='flex justify-center text-gray-500 p-10 text-lg'>
